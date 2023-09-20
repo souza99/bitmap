@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <array>
 
 #include "libs/bitmap/bitmap_image.hpp"
 
@@ -20,7 +21,18 @@ template <typename T>
 inline T set_bits (const T v, const unsigned bstart, const unsigned blength, const T bits) {
 	const T mask = ((1 << blength) - 1) << bstart; 
 
-	return (v & mask) | (bits << bstart);
+	return (v & ~mask) | (bits << bstart);
+}
+
+array<int, 3> cores_pintadas(bitmap_image imagem, int linha, int coluna) {
+	array<int, 3> cores;
+	rgb_t color = imagem.get_pixel(coluna, linha);
+	
+	cores[0] = static_cast<unsigned>(color.red);
+	cores[1] = static_cast<unsigned>(color.green);
+	cores[2] = static_cast<unsigned>(color.blue);
+	
+	return cores;
 }
 
 
@@ -73,17 +85,26 @@ int main()
 	int pixel = 0;
 	int largura = 40;
 	string texto = "Inicial";
-	char caracter = texto[0];
 	
 	// estraindo os bites da nossa mensagem
 	bool bit = extract_bits(static_cast<unsigned char>(caracter), 0, 1);
 	
 	for (int caracter_mensagem = 0; caracter_mensagem <= texto.size(); caracter_mensagem++) {
 		// estraindo os bites da nossa mensagem
-		bool bit = extract_bits(static_cast<unsigned char>(caracter), caracter_mensagem, 1);
-		for (int bit_caracter = 0; bit_caracter <= 7; bit_caracter++) {
+		char caracter = texto[caracter_mensagem];
+		
+		for (int bit_caracter = 0; bit_caracter <= 8; bit_caracter++) {
+			bool bit = extract_bits(static_cast<unsigned char>(caracter), bit_caracter, 1);
+			
 			if(pixel >= image2.width()) {
-				int largura_novo = largura - pixel;
+				int linha = static_cast<int>(pixel/image2.width());
+				int coluna = pixel % image2.width();
+				auto cores = cores_pintadas(image2, linha, coluna);
+				image2.set_pixel(coluna, linha, cores[0], cores[1], (cores[2] >= 255) ? cores[2]-1 : cores[2]+1);
+			}
+			else {
+				auto cores = cores_pintadas(image2, 0, pixel);
+				image2.set_pixel(pixel, 0, cores[0], cores[1], (cores[2] >= 255) ? cores[2]-1 : cores[2]+1);
 			}
 			
 			pixel++;
@@ -96,3 +117,6 @@ int main()
 	
 	return 0;
 }
+
+
+
