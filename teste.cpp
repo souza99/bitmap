@@ -10,6 +10,8 @@
 
 using namespace std;
 
+string PALAVRA_CHAVE = "´^`";
+
 template <typename T>
 inline T extract_bits (const T v, const unsigned bstart, const unsigned blength) {
 	const T mask = (1 << blength) - 1;
@@ -33,6 +35,40 @@ array<int, 3> cores_pintadas(bitmap_image imagem, int linha, int coluna) {
 	cores[2] = static_cast<unsigned>(color.blue);
 	
 	return cores;
+}
+
+int pintar_imagem(string mensagem, bitmap_image imagem, int pixel) {
+	for (int indice_da_mensagem = 0; indice_da_mensagem < mensagem.size(); indice_da_mensagem++) {
+		// estraindo os bites da nossa mensagem
+		char caracter = mensagem[indice_da_mensagem];
+		
+		for (int indice_do_bit_caracter = 0; indice_do_bit_caracter <= 8; indice_do_bit_caracter++) {
+			bool bit_do_caracter = extract_bits(static_cast<unsigned char>(caracter), indice_do_bit_caracter, 1);
+	
+			if(bit_do_caracter == 1) {
+				int linha = static_cast<int>(pixel/imagem.width());
+				int coluna = pixel % imagem.width();
+				auto cores = cores_pintadas(imagem, linha, coluna);
+				imagem.set_pixel(coluna, linha, cores[0], cores[1], (cores[2] >= 255) ? cores[2]-1 : cores[2]+1);
+			}
+			pixel++;
+			
+		}
+		
+	}
+	return pixel;
+}
+
+
+
+void esconder_mensagem(string mensagem, bitmap_image imagem) {
+	int pixel = 0;
+	int largura = 40;
+	
+	pixel = pintar_imagem(mensagem, imagem, pixel);
+	pixel = pintar_imagem(PALAVRA_CHAVE, imagem, pixel);
+	
+	cout << pixel << endl;
 }
 
 
@@ -82,34 +118,8 @@ int main()
 	
 	color = image2.get_pixel(2, 0);
 	
-	int pixel = 0;
-	int largura = 40;
-	string texto = "Inicial";
+	esconder_mensagem("Inicio", image2);
 	
-	// estraindo os bites da nossa mensagem
-	bool bit = extract_bits(static_cast<unsigned char>(caracter), 0, 1);
-	
-	for (int caracter_mensagem = 0; caracter_mensagem <= texto.size(); caracter_mensagem++) {
-		// estraindo os bites da nossa mensagem
-		char caracter = texto[caracter_mensagem];
-		
-		for (int bit_caracter = 0; bit_caracter <= 8; bit_caracter++) {
-			bool bit = extract_bits(static_cast<unsigned char>(caracter), bit_caracter, 1);
-			
-			if(pixel >= image2.width()) {
-				int linha = static_cast<int>(pixel/image2.width());
-				int coluna = pixel % image2.width();
-				auto cores = cores_pintadas(image2, linha, coluna);
-				image2.set_pixel(coluna, linha, cores[0], cores[1], (cores[2] >= 255) ? cores[2]-1 : cores[2]+1);
-			}
-			else {
-				auto cores = cores_pintadas(image2, 0, pixel);
-				image2.set_pixel(pixel, 0, cores[0], cores[1], (cores[2] >= 255) ? cores[2]-1 : cores[2]+1);
-			}
-			
-			pixel++;
-		}
-	}
 
 	cout << static_cast<unsigned>(color.red) << endl;
 	cout << static_cast<unsigned>(color.green) << endl;
@@ -117,6 +127,5 @@ int main()
 	
 	return 0;
 }
-
 
 
