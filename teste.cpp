@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <array>
 
 #include "libs/bitmap/bitmap_image.hpp"
@@ -37,12 +38,12 @@ array<int, 3> cores_pintadas(bitmap_image imagem, int linha, int coluna) {
 	return cores;
 }
 
-int pintar_imagem(string mensagem, bitmap_image imagem, int pixel) {
+int pintar_imagem(const string_view mensagem, bitmap_image& imagem, int pixel) {
 	for (int indice_da_mensagem = 0; indice_da_mensagem < mensagem.size(); indice_da_mensagem++) {
 		// estraindo os bites da nossa mensagem
 		char caracter = mensagem[indice_da_mensagem];
 		
-		for (int indice_do_bit_caracter = 0; indice_do_bit_caracter <= 8; indice_do_bit_caracter++) {
+		for (int indice_do_bit_caracter = 0; indice_do_bit_caracter < 8; indice_do_bit_caracter++) {
 			bool bit_do_caracter = extract_bits(static_cast<unsigned char>(caracter), indice_do_bit_caracter, 1);
 	
 			if(bit_do_caracter == 1) {
@@ -61,7 +62,7 @@ int pintar_imagem(string mensagem, bitmap_image imagem, int pixel) {
 
 
 
-void esconder_mensagem(string mensagem, bitmap_image imagem) {
+void esconder_mensagem(const string_view mensagem, bitmap_image& imagem) {
 	int pixel = 0;
 	int largura = 40;
 	
@@ -119,7 +120,6 @@ int main()
 	color = image2.get_pixel(2, 0);
 	
 	esconder_mensagem("Inicio", image2);
-	
 
 	cout << static_cast<unsigned>(color.red) << endl;
 	cout << static_cast<unsigned>(color.green) << endl;
