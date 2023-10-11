@@ -48,7 +48,7 @@ string transformar_binario_em_char(vector<bool>& mensagem_em_binario) {
 		if(posicao == 7) {
 			mensagem += c;
 			if (mensagem.ends_with(PALAVRA_CHAVE)) {
-				mensagem.replace(-PALAVRA_CHAVE.size(), PALAVRA_CHAVE.size(), "");
+				//mensagem.replace(-PALAVRA_CHAVE.size(), PALAVRA_CHAVE.size(), "");
 				break;
 			}
 			c = 0;
@@ -56,7 +56,7 @@ string transformar_binario_em_char(vector<bool>& mensagem_em_binario) {
 		
 		
 	}
-	
+	cout << "Converteu" << endl;
 	cout << mensagem << endl;
 	
 	return mensagem;
