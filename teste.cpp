@@ -76,6 +76,7 @@ void esconder_mensagem(const string_view mensagem, bitmap_image& imagem) {
 	pixel = pintar_imagem(mensagem, imagem, pixel);
 	pixel = pintar_imagem(PALAVRA_CHAVE, imagem, pixel);
 	
+	imagem.save_image("output.bmp");
 	cout << pixel << endl;
 }
 
