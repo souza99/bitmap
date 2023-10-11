@@ -35,9 +35,29 @@ bool comparar_pixel_imagens(const rgb_t cor_imagem_original, const rgb_t cor_ima
 	return 1;
 }
 
-char transformar_binario_em_char(vector<bool> mensagem_em_binario) {
-	//Implementar isso
-	return 'a';
+string transformar_binario_em_char(vector<bool>& mensagem_em_binario) {
+	string mensagem;
+	unsigned char c;
+	
+	for(int i = 0; i < mensagem_em_binario.size(); i++ ) {
+		int posicao = i % 8;
+		
+		if(posicao == 0) {
+			if(i > 0) {
+				mensagem += c;
+			}
+			c = 0;
+		}
+		c = set_bits(c, posicao, 1, static_cast<unsigned char>(mensagem_em_binario[i])); 
+		
+		if (mensagem.ends_with(PALAVRA_CHAVE)) {
+			string mensagem_convertida = replace(-3, PALAVRA_CHAVE.size(), "")
+			mensagem = mensagem_convertida;
+			break;
+		}
+	}
+	
+	return mensagem;
 }
 
 string comparar_imagens() {
@@ -56,16 +76,10 @@ string comparar_imagens() {
 			rgb_t cor_imagem_original = imagem_original.get_pixel(coluna, linha);
 			rgb_t cor_imagem_modificada = imagem_modificada.get_pixel(coluna, linha);
 			mensagem_em_binario.insert(comparar_pixel_imagens(cor_imagem_original, cor_imagem_modificada));
-			
-			if (mensagem_em_binario.size() == 8) {
-				mensagem.insert(transformar_binario_em_char(mensagem_em_binario));
-			}
-			
-			if (mensagem.ends_with(PALAVRA_CHAVE)) {
-				break;
-			}
 		}
 	}
+	
+	mensagem.insert(transformar_binario_em_char(mensagem_em_binario));
 	
 }
 
