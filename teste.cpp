@@ -1,3 +1,10 @@
+//http:www.partow.net/programming/bitmap/index.html
+//https:github.com/maldonadoq/pacman/blob/master/asd/comida1.bmp
+ //rgb_t colour;
+
+
+
+//teste.cpp
 
 #include <cmath>
 #include <cstdio>
@@ -11,7 +18,7 @@
 
 using namespace std;
 
-string PALAVRA_CHAVE = "´^`";
+const string PALAVRA_CHAVE = "´^`";
 
 template <typename T>
 inline T extract_bits (const T v, const unsigned bstart, const unsigned blength) {
@@ -127,5 +134,6 @@ int main()
 	
 	return 0;
 }
+
 
 
