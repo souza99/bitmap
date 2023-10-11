@@ -37,25 +37,27 @@ bool comparar_pixel_imagens(const rgb_t cor_imagem_original, const rgb_t cor_ima
 
 string transformar_binario_em_char(vector<bool>& mensagem_em_binario) {
 	string mensagem;
-	unsigned char c;
+	unsigned char c = 0;
 	
 	for(int i = 0; i < mensagem_em_binario.size(); i++ ) {
 		int posicao = i % 8;
 		
-		if(posicao == 0) {
-			if(i > 0) {
-				mensagem += c;
+		
+		c = set_bits(c, posicao, 1, static_cast<unsigned char>(mensagem_em_binario[i])); 
+		
+		if(posicao == 7) {
+			mensagem += c;
+			if (mensagem.ends_with(PALAVRA_CHAVE)) {
+				mensagem.replace(-PALAVRA_CHAVE.size(), PALAVRA_CHAVE.size(), "");
+				break;
 			}
 			c = 0;
 		}
-		c = set_bits(c, posicao, 1, static_cast<unsigned char>(mensagem_em_binario[i])); 
 		
-		if (mensagem.ends_with(PALAVRA_CHAVE)) {
-			string mensagem_convertida = replace(-3, PALAVRA_CHAVE.size(), "")
-			mensagem = mensagem_convertida;
-			break;
-		}
+		
 	}
+	
+	cout << mensagem << endl;
 	
 	return mensagem;
 }
@@ -71,15 +73,15 @@ string comparar_imagens() {
 	
 	string mensagem;
 	
-	for (int linha = 0; linha < imagem.height(); linha++) {
-		for (int coluna = 0; coluna < imagem.width(); coluna++) {
+	for (int linha = 0; linha < imagem_modificada.height(); linha++) {
+		for (int coluna = 0; coluna < imagem_modificada.width(); coluna++) {
 			rgb_t cor_imagem_original = imagem_original.get_pixel(coluna, linha);
 			rgb_t cor_imagem_modificada = imagem_modificada.get_pixel(coluna, linha);
-			mensagem_em_binario.insert(comparar_pixel_imagens(cor_imagem_original, cor_imagem_modificada));
+			mensagem_em_binario.push_back(comparar_pixel_imagens(cor_imagem_original, cor_imagem_modificada));
 		}
 	}
 	
-	mensagem.insert(transformar_binario_em_char(mensagem_em_binario));
+	mensagem = transformar_binario_em_char(mensagem_em_binario);
 	
 }
 
