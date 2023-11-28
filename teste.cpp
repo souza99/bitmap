@@ -18,7 +18,7 @@
 
 using namespace std;
 
-const string PALAVRA_CHAVE = "´^`";
+const string PALAVRA_CHAVE = "0";
 
 template <typename T>
 inline T extract_bits (const T v, const unsigned bstart, const unsigned blength) {
@@ -127,7 +127,7 @@ int main()
 	
 	color = image2.get_pixel(2, 0);
 	
-	esconder_mensagem("Inicio", image2);
+	esconder_mensagem("MathSouza", image2);
 
 	cout << static_cast<unsigned>(color.red) << endl;
 	cout << static_cast<unsigned>(color.green) << endl;
@@ -135,6 +135,5 @@ int main()
 	
 	return 0;
 }
-
 
 
