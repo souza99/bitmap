@@ -11,7 +11,7 @@
 
 using namespace std;
 
-string PALAVRA_CHAVE = "´^`";
+string PALAVRA_CHAVE = "0";
 
 template <typename T>
 inline T extract_bits (const T v, const unsigned bstart, const unsigned blength) {
@@ -46,11 +46,17 @@ string transformar_binario_em_char(vector<bool>& mensagem_em_binario) {
 		c = set_bits(c, posicao, 1, static_cast<unsigned char>(mensagem_em_binario[i])); 
 		
 		if(posicao == 7) {
-			mensagem += c;
-			if (mensagem.ends_with(PALAVRA_CHAVE)) {
-				//mensagem.replace(-PALAVRA_CHAVE.size(), PALAVRA_CHAVE.size(), "");
+			cout << c << endl;
+			string tmp;
+			tmp += static_cast<char>(c);
+			if (PALAVRA_CHAVE == tmp) {
 				break;
 			}
+			mensagem += c;
+			//if (str(mensagem , PALAVRA_CHAVE) - men) {
+				//mensagem.replace(-PALAVRA_CHAVE.size(), PALAVRA_CHAVE.size(), "");
+				//break;
+			//}
 			c = 0;
 		}
 		
